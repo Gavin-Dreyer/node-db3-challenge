@@ -17,6 +17,7 @@ function find() {
 }
 
 function findById(id) {
+	// console.log({ id });
 	return db('schemes')
 		.where({ id })
 		.first();
@@ -40,15 +41,15 @@ function findSteps(id) {
 }
 
 function add(body) {
-	return db('schemes')
-		.insert(body)
-		.then(ids => {
-			console.log(ids), findById(ids[0]);
-		});
+	return db
+		.insert(body, 'id')
+		.into('schemes')
+		.then(ids => findById(ids[0]));
 }
 
 function addStep(body, id) {
 	body = { ...body, scheme_id: id };
+	console.log(body);
 	return db
 		.insert(body, 'id')
 		.into('steps')
@@ -60,9 +61,7 @@ function update(body, id) {
 	return db('schemes')
 		.where({ id })
 		.update(body)
-		.then(ids => {
-			console.log(ids), findById(ids);
-		});
+		.then(ids => findById(id));
 }
 
 function remove(id) {
